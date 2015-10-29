@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 # add our user and group first to make sure their IDs get assigned consistently
-RUN groupadd -r kibana && useradd -r -g kibana kibana
+RUN groupadd -r kibana && useradd -r -m -g kibana kibana
 
 RUN apt-get update && apt-get install -y ca-certificates curl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
@@ -15,14 +15,15 @@ RUN arch="$(dpkg --print-architecture)" \
 	&& rm /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu
 
-ENV KIBANA_VERSION 4.1.2
-ENV KIBANA_SHA1 45e67114f7dac4ccac8118bf98ee8f6362c7a6a1
+ENV KIBANA_VERSION 4.2.0-beta2
+ENV KIBANA_SHA1 c320cfa81859d17e9e79cb6a84ab54f3539bdc10
 
 RUN set -x \
 	&& curl -fSL "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" -o kibana.tar.gz \
 	&& echo "${KIBANA_SHA1}  kibana.tar.gz" | sha1sum -c - \
 	&& mkdir -p /opt/kibana \
 	&& tar -xz --strip-components=1 -C /opt/kibana -f kibana.tar.gz \
+	&& chown -R kibana:kibana /opt/kibana \
 	&& rm kibana.tar.gz
 
 ENV PATH /opt/kibana/bin:$PATH
