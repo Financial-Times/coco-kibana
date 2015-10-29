@@ -11,10 +11,9 @@ sed -ri "s/^elasticsearch_preserve_host: true/elasticsearch_preserve_host: false
 
 # Run as user "kibana" if the command is "kibana"
 if [ "$1" = 'kibana' ]; then
-
 	if [ "$ELASTICSEARCH_URL" -o "$ELASTICSEARCH_PORT_9200_TCP" ]; then
 		: ${ELASTICSEARCH_URL:='http://elasticsearch:9200'}
-		sed -ri "s!^(elasticsearch_url:).*!\1 '$ELASTICSEARCH_URL'!" /opt/kibana/config/kibana.yml
+		sed -ri "s!^(\#\s*)?(elasticsearch\.url:).*!\2 '$ELASTICSEARCH_URL'!" /opt/kibana/config/kibana.yml
 	else
 		echo >&2 'warning: missing ELASTICSEARCH_PORT_9200_TCP or ELASTICSEARCH_URL'
 		echo >&2 '  Did you forget to --link some-elasticsearch:elasticsearch'
