@@ -7,8 +7,6 @@ if [[ "$1" == -* ]]; then
 	set -- kibana "$@"
 fi
 
-sed -ri "s/^elasticsearch_preserve_host: true/elasticsearch_preserve_host: false/" /opt/kibana/config/kibana.yml
-
 # Run as user "kibana" if the command is "kibana"
 if [ "$1" = 'kibana' ]; then
 	if [ "$ELASTICSEARCH_URL" -o "$ELASTICSEARCH_PORT_9200_TCP" ]; then
